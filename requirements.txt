@@ -1,0 +1,8 @@
+fastapi
+uvicorn[standard]
+pytesseract
+Pillow
+pdf2image
+python-multipart
+langdetect
+googletrans==4.0.0-rc1
