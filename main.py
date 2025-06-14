@@ -10,6 +10,7 @@ import pdf2image
 from langdetect import detect
 from googletrans import Translator
 import logging
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -77,8 +78,12 @@ async def get_progress(task_id: str):
         raise HTTPException(404, "Tâche introuvable")
     return tasks[task_id]
 
-@app.get("/translate/{text}/{target_lang}")
-async def translate_text(text: str, target_lang: str):
+class TranslateRequest(BaseModel):
+    text: str
+    target_lang: str
+
+@app.post("/translate")
+async def translate_text_post(req: TranslateRequest):
     translator = Translator()
-    translation = translator.translate(text, dest=target_lang)
+    translation = translator.translate(req.text, dest=req.target_lang)
     return {"translation": translation.text}
